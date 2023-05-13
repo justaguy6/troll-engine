@@ -148,10 +148,10 @@ class FreeplayState extends MusicBeatState
 			//// psych engine
 			var weeksFolderPath = Paths.mods('$mod/weeks/');
 			
-			if (FileSystem.exists(weeksFolderPath) && FileSystem.isDirectory(weeksFolderPath))
+			if (Assets.exists(weeksFolderPath))
 			{	
 				var addedCat = false;
-				for (weekFileName in FileSystem.readDirectory(weeksFolderPath))
+				for (weekFileName in HSys.readDirectory(weeksFolderPath))
 				{
 					if (!weekFileName.endsWith(".json")) continue;
 
