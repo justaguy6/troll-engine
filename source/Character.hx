@@ -636,10 +636,10 @@ class Character extends FlxSprite
 		];
 		for (i in 0...directories.length) {
 			var directory:String = directories[i];
-			if(FileSystem.exists(directory)) {
-				for (file in FileSystem.readDirectory(directory)) {
+			if(Paths.exists(directory)) {
+				for (file in HSys.readDirectory(directory)) {
 					var path = haxe.io.Path.join([directory, file]);
-					if (!FileSystem.isDirectory(path) && file.endsWith('.json')) {
+					if (file.endsWith('.json')) {
 						var charToCheck:String = file.substr(0, file.length - 5);
 						if(!charsLoaded.exists(charToCheck)) {
 							characterList.push(charToCheck);
