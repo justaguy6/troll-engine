@@ -178,7 +178,7 @@ class Paths
 	}
 	inline static public function getContent(asset:String):Null<String>{
 		#if sys
-		if (lAssets.exists(asset))
+		if (Assets.exists(asset))
 			return Assets.getText(asset);
 		#else
 		if (Assets.exists(asset))
@@ -454,7 +454,7 @@ class Paths
 		if (ignoreMods != true){
 			var modPath:String = Paths.modFolders(key);
 			if (Assets.exists(modPath))
-				return OpenFlAssets.getText(modPath);
+				return Assets.getText(modPath);
 		}
 		#end
 
