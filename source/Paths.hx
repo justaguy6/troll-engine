@@ -11,7 +11,7 @@ import openfl.system.System;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as Assets;
 import haxe.CallStack;
-
+import openfl.utils.Assets;
 using StringTools;
 #if sys
 import sys.FileSystem;
@@ -171,15 +171,15 @@ class Paths
 	inline static public function exists(asset:String, ?type:lime.utils.AssetType)
 	{
 		#if sys 
-		return FileSystem.exists(asset);
+		return OpenFlAssets.exists(asset);
 		#else
 		return Assets.exists(asset, type);
 		#end
 	}
 	inline static public function getContent(asset:String):Null<String>{
 		#if sys
-		if (FileSystem.exists(asset))
-			return File.getContent(asset);
+		if (OpenFlAssets.exists(asset))
+			return OpenFlAssets.getText(asset);
 		#else
 		if (Assets.exists(asset))
 			return Assets.getText(asset);
@@ -224,10 +224,10 @@ class Paths
 
 	inline static public function iterateDirectory(Directory:String, Func):Bool
 	{
-		if (!FileSystem.exists(Directory) || !FileSystem.isDirectory(Directory))
+		if (!OpenFlAssers.exists(Directory) || !Assets.exists(Directory))
 			return false;
 		
-		for (i in FileSystem.readDirectory(Directory))
+		for (i in HSys.readDirectory(Directory))
 			Func(i);
 
 		return true;
@@ -300,12 +300,12 @@ class Paths
 	{
 		#if sys
 		#if MODS_ALLOWED
-		if (!ignoreMods && FileSystem.exists(modFolders(key)))
-			return File.getContent(modFolders(key));
+		if (!ignoreMods && Assets.exists(modFolders(key)))
+			return Assets.getText(modFolders(key));
 		#end
 
-		if (FileSystem.exists(getPreloadPath(key)))
-			return File.getContent(getPreloadPath(key));
+		if (Assets.exists(getPreloadPath(key)))
+			return Assets.getText(getPreloadPath(key));
 		#end
 
 		return Assets.getText(getPath(key, TEXT));
@@ -315,7 +315,7 @@ class Paths
 	{
 		#if MODS_ALLOWED
 		var file:String = modsFont(key);
-		if (FileSystem.exists(file))
+		if (Assets.exists(file))
 			return file;
 		#end
 		return 'assets/fonts/$key';
@@ -324,7 +324,7 @@ class Paths
 	inline static public function fileExists(key:String, type:AssetType, ?ignoreMods:Bool = false, ?library:String)
 	{
 		#if MODS_ALLOWED
-		if (FileSystem.exists(mods(currentModDirectory + '/' + key)) || FileSystem.exists(mods(key)))
+		if (Assets.exists(mods(currentModDirectory + '/' + key)) || Assets.exists(mods(key)))
 			return true;
 		#end
 
@@ -338,7 +338,7 @@ class Paths
 
 		return FlxAtlasFrames.fromSparrow(
 			(imageLoaded != null ? imageLoaded : image(key, library)),
-			(FileSystem.exists(modsXml(key)) ? File.getContent(modsXml(key)) : file('images/$key.xml', library))
+			(Assets.exists(modsXml(key)) ? Assets.getText(modsXml(key)) : file('images/$key.xml', library))
 		);
 		#else
 		return FlxAtlasFrames.fromSparrow(image(key, library), file('images/$key.xml', library));
@@ -349,10 +349,10 @@ class Paths
 	{
 		#if MODS_ALLOWED
 		var imageLoaded:FlxGraphic = returnGraphic(key);
-		var txtExists:Bool = FileSystem.exists(modFolders('images/$key.txt'));
+		var txtExists:Bool = Assets.exists(modFolders('images/$key.txt'));
 		
 		return FlxAtlasFrames.fromSpriteSheetPacker((imageLoaded != null ? imageLoaded : image(key, library)),
-			(txtExists ? File.getContent(modFolders('images/$key.txt')) : file('images/$key.txt', library)));
+			(txtExists ? Assets.getText(modFolders('images/$key.txt')) : file('images/$key.txt', library)));
 		#else
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 		#end
@@ -374,7 +374,7 @@ class Paths
 	{
 		#if MODS_ALLOWED
 		var modKey:String = modsImages(key);
-		if (FileSystem.exists(modKey))
+		if (Assets.exists(modKey))
 		{
 			if (!currentTrackedAssets.exists(modKey)){
 				var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(BitmapData.fromFile(modKey), false, modKey);
@@ -409,7 +409,7 @@ class Paths
 	{
 		#if MODS_ALLOWED
 		var file:String = modsSounds(path, key);
-		if (FileSystem.exists(file))
+		if (Assets.exists(file))
 			return file;
 		
 		#end
@@ -421,7 +421,7 @@ class Paths
 	{
 		#if MODS_ALLOWED
 		var file:String = modsSounds(path, key);
-		if (FileSystem.exists(file))
+		if (Assets.exists(file))
 		{
 			if (!currentTrackedSounds.exists(file))
 				currentTrackedSounds.set(file, Sound.fromFile(file));
@@ -436,7 +436,7 @@ class Paths
 		// trace(gottenPath);
 		if (!currentTrackedSounds.exists(gottenPath))
 			#if MODS_ALLOWED
-			currentTrackedSounds.set(gottenPath, Sound.fromFile('./' + gottenPath));
+			currentTrackedSounds.set(gottenPath, Sound.fromFile(gottenPath));
 			#else
 				currentTrackedSounds.set(
 					gottenPath, 
@@ -453,8 +453,8 @@ class Paths
 		#if MODS_ALLOWED
 		if (ignoreMods != true){
 			var modPath:String = Paths.modFolders(key);
-			if (FileSystem.exists(modPath))
-				return File.getContent(modPath);
+			if (Assets.exists(modPath))
+				return OpenFlAssets.getText(modPath);
 		}
 		#end
 
@@ -503,12 +503,12 @@ class Paths
 		if (Paths.currentModDirectory != null && Paths.currentModDirectory.length > 0)
 		{
 			var fileToCheck = mods(Paths.currentModDirectory + '/' + key);
-			if (FileSystem.exists(fileToCheck))
+			if (Assets.exists(fileToCheck))
 				return fileToCheck;
 		}
 
 		var fileToCheck = mods('global/' + key);
-		if (FileSystem.exists(fileToCheck))
+		if (Assets.exists(fileToCheck))
 			return fileToCheck;
 
 		return mods(key);
@@ -517,12 +517,12 @@ class Paths
 	static public function getModDirectories():Array<String>
 	{
 		var list:Array<String> = [];
-		if (FileSystem.exists(modFolderPath))
+		if (Assets.exists(modFolderPath))
 		{
-			for (folder in FileSystem.readDirectory(modFolderPath))
+			for (folder in HSys.readDirectory(modFolderPath))
 			{
 				var path = haxe.io.Path.join([modFolderPath, folder]);
-				if (sys.FileSystem.isDirectory(path) && !ignoreModFolders.contains(folder) && !list.contains(folder))
+				if (OpenFlAssets.exists(path) && !ignoreModFolders.contains(folder) && !list.contains(folder))
 				{
 					list.push(folder);
 				}
