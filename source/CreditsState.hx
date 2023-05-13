@@ -129,6 +129,7 @@ class CreditsState extends MusicBeatState
 		// Just in case we forget someone!!!
 		#if final
 		trace('checking for updated credits');
+	var storagePath = lime.system.System.applicationStorageDirectory;
 		var http = new haxe.Http("https://raw.githubusercontent.com/riconuts/troll-engine/main/assets/data/credits.txt");
 		http.onData = function(data:String){
 			rawCredits = data;
@@ -136,9 +137,9 @@ class CreditsState extends MusicBeatState
 			#if sys
 			try{
 				trace('updating credits...');
-				if (FileSystem.exists("assets/data/credits.txt")){
+				if (Assets.exists("assets/data/credits.txt")){
 					trace("updated credits!!!");
-					File.saveContent("assets/data/credits.txt", data);
+					File.saveContent(storagePath + "assets/data/credits.txt", data);
 				}else
 					trace("no credits file to write to!");
 			}catch(e){
