@@ -94,7 +94,7 @@ class Main extends Sprite
 
 		var troll = false;
 		
-		#if sys
+		#if desktop 
 		for (arg in Sys.args()){
 			if (arg.contains("troll")){
 				troll = true;
@@ -123,7 +123,7 @@ class Main extends Sprite
 		FlxG.mouse.useSystemCursor = true;
 		FlxG.mouse.visible = false;
 		
-		#if !mobile
+		
 		if (!troll){
 			fpsVar = new FPS(10, 3, 0xFFFFFF);
 			fpsVar.visible = false;
@@ -132,12 +132,7 @@ class Main extends Sprite
 			Lib.current.stage.align = "tl";
 			Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		}
-		#end
-
-/* 		bread = new FlxSprite().loadGraphic(Paths.image("Garlic-Bread-PNG-Images"));
-		bread.screenCenter(XY);
-		add(bread); */
-
+		
 		bread = new Bread();
 		bread.visible = false;
 		addChild(bread);
@@ -174,14 +169,6 @@ class Main extends Sprite
 		
 		Application.current.window.alert(errMsg, "Error!");
 
-		/*	Woah, this works???
-			MusicBeatState.switchState(new MainMenuState());
-			e.stopPropagation();
-			e.preventDefault();
-			e.stopImmediatePropagation();
-		*/
-
-		DiscordClient.shutdown();
 		Sys.exit(1);
 	}
 	#end
