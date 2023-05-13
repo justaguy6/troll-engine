@@ -522,7 +522,7 @@ class Paths
 			for (folder in HSys.readDirectory(modFolderPath))
 			{
 				var path = haxe.io.Path.join([modFolderPath, folder]);
-				if (OpenFlAssets.exists(path) && !ignoreModFolders.contains(folder) && !list.contains(folder))
+				if (!ignoreModFolders.contains(folder) && !list.contains(folder))
 				{
 					list.push(folder);
 				}
