@@ -11,7 +11,7 @@ import openfl.system.System;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as Assets;
 import haxe.CallStack;
-import openfl.utils.Assets;
+import openfl.utils.OpenFlAssets;
 using StringTools;
 #if sys
 import sys.FileSystem;
