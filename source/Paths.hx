@@ -11,7 +11,7 @@ import openfl.system.System;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as Assets;
 import haxe.CallStack;
-import openfl.OpenFlAssets;
+
 using StringTools;
 #if sys
 import sys.FileSystem;
@@ -171,15 +171,15 @@ class Paths
 	inline static public function exists(asset:String, ?type:lime.utils.AssetType)
 	{
 		#if sys 
-		return OpenFlAssets.exists(asset);
+		return Assets.exists(asset);
 		#else
 		return Assets.exists(asset, type);
 		#end
 	}
 	inline static public function getContent(asset:String):Null<String>{
 		#if sys
-		if (OpenFlAssets.exists(asset))
-			return OpenFlAssets.getText(asset);
+		if (lAssets.exists(asset))
+			return Assets.getText(asset);
 		#else
 		if (Assets.exists(asset))
 			return Assets.getText(asset);
@@ -224,7 +224,7 @@ class Paths
 
 	inline static public function iterateDirectory(Directory:String, Func):Bool
 	{
-		if (!OpenFlAssers.exists(Directory) || !Assets.exists(Directory))
+		if (!Assets.exists(Directory) || !Assets.exists(Directory))
 			return false;
 		
 		for (i in HSys.readDirectory(Directory))
